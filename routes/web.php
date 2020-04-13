@@ -1,5 +1,6 @@
 <?php
 
+
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 /*
@@ -22,6 +23,22 @@ $router->get('/api', function () use ($router) {
 $router->group(['prefix' => 'api', 'namespace' => 'App\Http\Controllers'], function () use ($router) {
     $router->get('test',function () use ($router){
        return response()->json(['message'=> 'Ok']);
+    });
+
+    $router->get('db',function () use ($router){
+        
+        $servername = "localhost";
+        $username = "drqueue";
+        $password = "drqueue";
+        
+        // Create connection
+        $conn = new mysqli($servername, $username, $password);
+        
+        // Check connection
+        if ($conn->connect_error) {
+            die("Connection failed: " . $conn->connect_error);
+        }
+        echo "Connected successfully";
     });
 });
 
