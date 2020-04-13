@@ -27,7 +27,7 @@ $router->group(['prefix' => 'api', 'namespace' => 'App\Http\Controllers'], funct
 
     $router->get('db',function () use ($router){
         
-        $servername = "localhost";
+        $servername = "13.233.198.210";
         $username = "drqueue";
         $password = "drqueue";
         
