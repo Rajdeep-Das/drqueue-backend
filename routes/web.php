@@ -17,29 +17,28 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->get('db',function () use ($router){
+    $servername = "13.233.198.210";
+    $username = "drqueue";
+    $password = "drqueue";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    echo "Connected successfully";
+});
 $router->get('/api', function () use ($router) {
     return response()->json(['message' => 'DrQueue Api', 'version' => '1.0']);
 });
-$router->group(['prefix' => 'api', 'namespace' => 'App\Http\Controllers'], function () use ($router) {
-    $router->get('test',function () use ($router){
-       return response()->json(['message'=> 'Ok']);
-    });
-
-    $router->get('db',function () use ($router){
-        
-        $servername = "13.233.198.210";
-        $username = "drqueue";
-        $password = "drqueue";
-        
-        // Create connection
-        $conn = new mysqli($servername, $username, $password);
-        
-        // Check connection
-        if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
-        }
-        echo "Connected successfully";
-    });
+$router->group(['prefix' => 'api'], function () use ($router) {
+    // Matches "/api/register
+    $router->post('register', 'AuthController@register');
+    // Matches "/api/login
+    $router->post('login', 'AuthController@login');
 });
 
 
