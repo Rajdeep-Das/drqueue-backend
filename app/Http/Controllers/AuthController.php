@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Auth;
 
 use Firebase\JWT\JWT;
 
+// Twilio Specific Imports
+use Twilio\Rest\Client;
+use Twilio\Jwt\ClientToken;
+
 class AuthController extends Controller
 {
     /**
@@ -64,12 +68,18 @@ class AuthController extends Controller
 
             $user->save();
 
-            // TODO :: Send OTP For Verification
+
             $phone = $request->input('phone');
             $phoneLogin = PhoneLogin::createForPhoneLogin($phone);
             $otp = $phoneLogin->otp;
 
-
+            // TODO :: Send OTP For Verification
+            /*if(AuthController::sendSMSOTPUsingTwilio($phone,$otp)){
+                //return successful response
+                return response()->json(['user' => $user, 'message' => 'OTP Send To '.$phone,'otp'=>$otp,'success' => true,], 201);
+            }else{
+                return response()->json(['user' => $user, 'message' => ' Unable to send OTP To '.$phone,'otp'=>$otp,'success' => false,], 201);
+            }*/
             //return successful response
             return response()->json(['user' => $user, 'message' => 'OTP Send To '.$phone,'otp'=>$otp,'success' => true,], 201);
 
@@ -99,7 +109,7 @@ class AuthController extends Controller
         $otp = $phoneLogin->otp;
 
         // TODO:: Send OTP To The User Phone
-
+       // AuthController::sendSMSOTPUsingTwilio($phone,$otp);
 
         return response()->json(['success' => true,'message'=>'OTP Send To '.$phone,'otp'=>$otp], 200);
 
@@ -164,6 +174,32 @@ class AuthController extends Controller
             'error' => 'OTP is wrong.'
         ], 400);
         }
+    }
+
+
+    /* -----------------------------------  Helper Methods -------------------------------------------------- */
+    protected static function sendSMSOTPUsingTwilio($phone,$otp){
+        $sid    = env('TWILIO_ACCOUNT_SID');
+        $token  = env('TWILIO_AUTH_TOKEN');
+        $number = env('TWILIO_NUMBER');
+        $twilio = new Client($sid, $token);
+
+        $formatedPhoneNmber = "+91".$phone;
+
+        try{
+            $message = $twilio->messages
+                ->create("+918910271693", // to
+                    array(
+                        "from" => $number,
+                        "body" => "Your Dr.Queue OTP is ".$otp
+                    )
+                );
+            return true;
+        } catch (\Exception $e)
+        {
+            return false;
+        }
+
     }
 
 
