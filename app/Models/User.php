@@ -8,7 +8,6 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Lumen\Auth\Authorizable;
 
-use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Model implements AuthenticatableContract, AuthorizableContract
 {
@@ -20,7 +19,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @var array
      */
     protected $fillable = [
-        'name','gender','phone', 'email','avatar',
+        'name','gender','avatar',
     ];
 
     /**
@@ -33,22 +32,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
+     * The attributes excluded from the mass assignable.
      *
-     * @return mixed
+     * @var array
      */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+    protected $guarded = ['phone','email'];
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
 }

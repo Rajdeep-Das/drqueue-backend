@@ -32,13 +32,36 @@ $router->get('db',function () use ($router){
     echo "Connected successfully";
 });
 $router->get('/api', function () use ($router) {
+
     return response()->json(['message' => 'DrQueue Api', 'version' => '1.0']);
 });
 $router->group(['prefix' => 'api'], function () use ($router) {
     // Matches "/api/register
-    $router->post('register', 'AuthController@register');
-    // Matches "/api/login
-    $router->post('login', 'AuthController@login');
+    $router->post('auth/register', 'AuthController@register');
+    // Matches "/api/auth/verify
+    $router->post('auth/phone/verify', 'AuthController@verifyFirstTimeUserPhone');
+    // Matches "/api/auth/login
+    $router->post('auth/phone/login', 'AuthController@loginRequestPhone');
+    // Matches "/api/auth/phone
+    $router->post('auth/phone/token', 'AuthController@authenticatePhone');
+
+
+
+    $router->group(
+        ['middleware' => 'jwt.auth'],
+        function() use ($router) {
+            // Matches "/api/profile
+            $router->get('profile', 'UserController@profile');
+            $router->patch('profile','UserController@profileUpdate');
+
+            // Matches "/api/users/1
+            //get one user by id
+            $router->get('users/{id}', 'UserController@singleUser');
+
+            // Matches "/api/users
+            $router->get('users', 'UserController@allUsers');
+        }
+    );
 });
 
 

@@ -79,6 +79,9 @@ $app->configure('app');
  $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
  ]);
+$app->routeMiddleware([
+    'jwt.auth' => App\Http\Middleware\JwtMiddleware::class,
+]);
 
 
 /*
@@ -98,7 +101,7 @@ $app->configure('app');
 
 // Custom JWT Provider
 // Add this line
-$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+//$app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
