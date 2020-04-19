@@ -33,12 +33,6 @@ class PhoneLogin extends Model{
     }
 
 
-
-
-
-
-
-
     // generate OTP
     protected static function generateOTP(){
         $min = str_pad(1, 4, 0);

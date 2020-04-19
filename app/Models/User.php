@@ -38,4 +38,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $guarded = ['phone','email'];
 
+    public function institutes()
+    {
+        return $this->hasMany('App\Models\Institute','id');
+    }
 }

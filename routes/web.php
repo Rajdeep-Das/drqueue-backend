@@ -47,6 +47,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
 
 
+
+
     $router->group(
         ['middleware' => 'jwt.auth'],
         function() use ($router) {
@@ -60,6 +62,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
 
             // Matches "/api/users
             $router->get('users', 'UserController@allUsers');
+
+
+            /* ---------------  Institute Routes -----------------*/
+            $router->get('/institutes','InstituteController@allInstitute');
+            $router->post('/institutes','InstituteController@createInstitute');
+            $router->patch('/institutes/{insId}','InstituteController@updateInstitute');
         }
     );
 });

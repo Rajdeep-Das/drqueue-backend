@@ -41,7 +41,7 @@ class AuthController extends Controller
             'iss' => "drqueue-backend", // Issuer of the token
             'sub' => $user->id, // Subject of the token
             'iat' => time(), // Time when JWT was issued.
-            'exp' => time()+ 60*60 // Expiration time
+            'exp' => time()+ 60*60*60*60 // Expiration time
         ];
 
         // As you can see we are passing `JWT_SECRET` as the second parameter that will
