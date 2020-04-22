@@ -105,14 +105,23 @@ class AuthController extends Controller
         ]);
 
         $phone = $request->input('phone');
-        $phoneLogin = PhoneLogin::createForPhoneLogin($phone);
-        $otp = $phoneLogin->otp;
 
-        // TODO:: Send OTP To The User Phone
-       // AuthController::sendSMSOTPUsingTwilio($phone,$otp);
+        try {
+            $user = User::where('phone', $phone)->firstOrFail();
+            if($user){
+                $phoneLogin = PhoneLogin::createForPhoneLogin($phone);
+                $otp = $phoneLogin->otp;
 
-        return response()->json(['success' => true,'message'=>'OTP Send To '.$phone,'otp'=>$otp], 200);
+                // TODO:: Send OTP To The User Phone
+                // AuthController::sendSMSOTPUsingTwilio($phone,$otp);
 
+                return response()->json(['success' => true,'message'=>'OTP Send To '.$phone,'otp'=>$otp], 200);
+            }
+
+        } catch (\Exception $e) {
+
+            return response()->json(['message' => 'user not registered!'], 404);
+        }
 
     }
 
