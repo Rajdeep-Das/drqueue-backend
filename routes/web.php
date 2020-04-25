@@ -45,10 +45,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Matches "/api/auth/phone
     $router->post('auth/phone/token', 'AuthController@authenticatePhone');
 
-
-
-
-
     $router->group(
         ['middleware' => 'jwt.auth'],
         function() use ($router) {
